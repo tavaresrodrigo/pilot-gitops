@@ -3,6 +3,8 @@ apiVersion: nfd.openshift.io/v1
 metadata:
   name: nfd-instance
   namespace: openshift-nfd
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   customConfig:
     configData: |
