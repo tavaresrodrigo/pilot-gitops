@@ -5,7 +5,5 @@ metadata:
   name: node-label-config
 data:
   nodes_list: |
-    node1.example.com
-    node2.example.com
-    node3.example.com
+    ip-10-0-8-106.eu-west-1.compute.internal
   mig_configuration: all-1g.10gb

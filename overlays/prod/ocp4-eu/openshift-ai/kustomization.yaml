@@ -12,7 +12,7 @@ components:
   - components/default-notebook-pvc-size
   - components/model-server-pod-sizes
   - components/idle-notebook-culling
-
+  - components/mig-label-nodes
   - components/components-serving
   - components/components-training
 
