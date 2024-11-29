@@ -9,7 +9,7 @@ spec:
     codeflare:
       managementState: Removed
     kserve:
-      managementState: Removed
+      managementState: Managed
       serving:
         ingressGateway:
           certificate:
@@ -21,12 +21,12 @@ spec:
     ray:
       managementState: Removed
     kueue:
-      managementState: Removed
+      managementState: Managed
     workbenches:
-      managementState: Removed
+      managementState: Managed
     dashboard:
       managementState: Managed
     modelmeshserving:
-      managementState: Removed
+      managementState: Managed
     datasciencepipelines:
-      managementState: Removed
+      managementState: Managed
