@@ -6,8 +6,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  customConfig:
-    configData: |
+  #customConfig:
+    #configData: |
       #    - name: "more.kernel.features"
       #      matchOn:
       #      - loadedKMod: ["example_kmod3"]
