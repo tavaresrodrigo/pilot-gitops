@@ -1,0 +1,84 @@
+---
+default:
+  app:
+    annotations:
+      argocd.argoproj.io/compare-options: IgnoreExtraneous
+    enabled: true
+    enableAutoSync: false  # temporary 
+    autoSyncPrune: false
+    project: cluster-config
+    destination:
+      namespace: openshift-gitops
+      server: https://kubernetes.default.svc
+    source:
+      repoURL: https://github.com/Yantra-Vinyasa/pilot-gitops.git
+      targetRevision: main
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ServerSideApply=true  
+    - FailOnSharedResource=true
+    - RespectIgnoreDifferences=true
+    - CreateNamespace=false
+    syncPolicyRetry:
+      limit: -1 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+        maxDuration: 10m # the maximum amount of time allowed for the backoff strategy
+
+projects:
+  cluster-config:
+    annotations:
+      argocd.argoproj.io/sync-wave: '-2'
+    description: Project for overall cluster configuration
+    namespace: openshift-gitops
+    sourceRepos:
+    - https://github.com/Yantra-Vinyasa/pilot-gitops.git
+    destinations: |
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+    extraFields: |
+      clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+
+applications:
+
+  web-terminal-operator:
+    annotations:
+      argocd.argoproj.io/sync-wave: '10'
+    source:
+      path: overlays/prod/ocp4-eu/web-terminal-operator
+
+
+  openshift-servicemesh:
+    annotations:
+      argocd.argoproj.io/sync-wave: '20'
+    source:
+      path: overlays/prod/ocp4-eu/openshift-servicemesh
+
+  openshift-serverless:
+    annotations:
+      argocd.argoproj.io/sync-wave: '30'
+    source:
+      path: overlays/prod/ocp4-eu/openshift-serverless
+
+  nfd:
+    annotations:
+      argocd.argoproj.io/sync-wave: '40'
+    source:
+      path: overlays/prod/ocp4-eu/nfd
+
+  gpu-operator-certified:
+    annotations:
+      argocd.argoproj.io/sync-wave: '50'
+    source:
+      path: overlays/prod/ocp4-eu/gpu-operator-certified
+
+  openshift-ai:
+    annotations:
+      argocd.argoproj.io/sync-wave: '60'
+    source:
+      path: overlays/prod/ocp4-eu/openshift-ai

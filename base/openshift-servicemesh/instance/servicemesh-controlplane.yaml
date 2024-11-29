@@ -1,0 +1,48 @@
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  name: istio-system
+  namespace: istio-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  addons:
+    grafana:
+      enabled: false
+    jaeger:
+      name: jaeger
+    kiali:
+      enabled: false
+      name: kiali
+    prometheus:
+      enabled: false
+  gateways:
+    ingress:
+      service:
+        metadata:
+          labels:
+            knative: ingressgateway
+    openshiftRoute:
+      enabled: false
+  profiles:
+    - default
+  proxy:
+    networking:
+      trafficControl:
+        inbound:
+          excludedPorts:
+            - 8444
+            - 8022
+        outbound: {}
+  security:
+    dataPlane:
+      mtls: true
+    identity:
+      type: ThirdParty
+  techPreview:
+    meshConfig:
+      defaultConfig:
+        terminationDrainDuration: 35s
+  tracing:
+    type: None
+  version: v2.6
