@@ -26,6 +26,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: node-label-sa
+    namespace: openshift-gitops
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
