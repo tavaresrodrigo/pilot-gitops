@@ -1,0 +1,68 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: node-label-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: node-label
+          image: registry.redhat.io/openshift4/ose-cli 
+          command:
+            - /bin/bash
+            - '-c'
+            - |
+              #!/bin/bash
+              set -euo pipefail
+
+              echo "Starting node labeling job..."
+
+              # Check if required environment variables are set
+              if [ -z "${NODES_LIST:-}" ]; then
+                echo "Environment variable NODES_LIST is not set."
+                exit 1
+              fi
+
+              if [ -z "${MIG_CONFIGURATION:-}" ]; then
+                echo "Environment variable MIG_CONFIGURATION is not set."
+                exit 1
+              fi
+
+              # Load the nodes list and MIG configuration
+              echo "Using MIG configuration: $MIG_CONFIGURATION"
+              
+              # Convert NODES_LIST into an array
+              IFS=$'\n' read -rd '' -a NODES <<< "$NODES_LIST"
+
+              # Process each node
+              for NODE in "${NODES[@]}"; do
+                if [ -z "$NODE" ]; then
+                  continue
+                fi
+                echo "Labeling node $NODE with MIG configuration: $MIG_CONFIGURATION"
+                oc label node "$NODE" nvidia.com/mig.config="$MIG_CONFIGURATION" --overwrite
+                if [ $? -eq 0 ]; then
+                  echo "Successfully labeled node $NODE."
+                else
+                  echo "Failed to label node $NODE."
+                  exit 1
+                fi
+              done
+
+              echo "Node labeling job completed."
+          env:
+            - name: NODES_LIST
+              valueFrom:
+                configMapKeyRef:
+                  name: node-label-config
+                  key: nodes_list
+            - name: MIG_CONFIGURATION
+              valueFrom:
+                configMapKeyRef:
+                  name: node-label-config
+                  key: mig_configuration
+      restartPolicy: Never
+      serviceAccount: node-label-sa
+      serviceAccountName: node-label-sa
+  backoffLimit: 3

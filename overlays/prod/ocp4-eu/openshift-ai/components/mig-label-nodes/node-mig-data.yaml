@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-label-config
+  namespace: kube-system
+data:
+  nodes_list: |
+    node1.example.com
+    node2.example.com
+    node3.example.com
+  mig_configuration: all-1g.10gb
