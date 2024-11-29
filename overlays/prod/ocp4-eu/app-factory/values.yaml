@@ -11,7 +11,7 @@ default:
       namespace: openshift-gitops
       server: https://kubernetes.default.svc
     source:
-      repoURL: https://github.com/Yantra-Vinyasa/pilot-gitops.git
+      repoURL: https://github.com/tavaresrodrigo/pilot-gitops.git
       targetRevision: main
     syncOptions:
     - ApplyOutOfSyncOnly=true
@@ -35,7 +35,7 @@ projects:
     description: Project for overall cluster configuration
     namespace: openshift-gitops
     sourceRepos:
-    - https://github.com/Yantra-Vinyasa/pilot-gitops.git
+    - https://github.com/tavaresrodrigo/pilot-gitops.git
     destinations: |
       - namespace: '*'
         server: https://kubernetes.default.svc
