@@ -23,7 +23,8 @@ spec:
                 echo "Environment variable NODES_LIST is not set."
                 exit 1
               fi
-              echo $NODES_LIST
+
+              echo "Nodes to be labeled: $NODES_LIST"
 
               if [ -z "${MIG_CONFIGURATION:-}" ]; then
                 echo "Environment variable MIG_CONFIGURATION is not set."
@@ -34,7 +35,8 @@ spec:
               echo "Using MIG configuration: $MIG_CONFIGURATION"
               
               # Convert NODES_LIST into an array
-              IFS=$'\n' read -d '' -a NODES <<< "$NODES_LIST"
+              echo "Converting nodes list into an array..."
+              mapfile -t NODES <<< "$NODES_LIST"
 
               # Process each node
               for NODE in "${NODES[@]}"; do
